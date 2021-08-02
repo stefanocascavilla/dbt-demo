@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: stg_customers_info
+    columns:
+      - name: customer_id
+        tests:
+          - not_null
+          - unique
+  - name: stg_orders_info
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+            to: ref('stg_customers_info')
+            field: customer_id
+      - name: status
+        tests:
+          - not_null
+          - accepted_values: ['placed', 'shipped', 'returned', 'completed', 'return_pending']
+  - name: stg_payments_info
+    columns:
+      - name: payment_id
+        tests:
+          - not_null
+          - unique
+      - name: order_id
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - not_null
+          - accepted_values: ['completed', 'fail']
